@@ -1,5 +1,7 @@
 import Mathlib.Tactic
-import Mathlib.Analysis.SpecialFunctions
+import Mathlib.Analysis.SpecialFunctions.Log.PosLog --This import caused a lot of issues
+import Mathlib.Data.Real.Basic
+
 
 -- theorem sumofn (n : ℕ) : ∑ k in Finset.range (n+1), k = n*(n+1)/2 := by
 --   induction n with
@@ -59,9 +61,9 @@ ring
 --       _ = (n + 1) * (n + 2) := by ring
 --         sorry
 
+def pos_real := { x : ℝ // 0 < x }
 
-
-theorem recursive_T {log: ℝ → ℝ}  {T: ℝ → ℝ}
+theorem recursive_T  {T: ℝ → ℝ}
     (h₀ : ∀ x, 0 ≤ x → x < 1 → T x = 0) -- Valid way of bounding x between 0 and 1 (including 0)
     (h₁ : ∀ x, 1 ≤ x → T x = T (x / 2) + 1)
-    : ∀ k ∈ ℕ, log x ≤ k :=
+   -- : ∀ k ∈ ℕ, Real.log x ≤ k :=
