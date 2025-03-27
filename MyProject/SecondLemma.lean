@@ -30,9 +30,14 @@ noncomputable def g (n: pos_real) : ℝ :=
 -- Use g as a function from ℝ → ℝ . Then just say 'I only care about n>= 1' Same for f?
 
 -- Substituting n/b^j for the given big O value of f(n).
-theorem Case1_0 (j : ℕ) (hO : f =O[Filter.atTop] (λ n => n^(Real.logb b (a - ε)))) :
-  (λ n => f (n / b^j)) =O[Filter.atTop] (λ n => (n / b^j)^(Real.logb b (a - ε))) := by
+theorem Case1_0 (j : ℕ) (hO : f =O[Filter.atTop] (fun n => n^(Real.logb b (a) - ε))) :
+  (fun n => f (n / b^j)) =O[Filter.atTop] (fun n => (n / b^j)^(Real.logb b (a) - ε)) := by
   rw [Asymptotics.isBigO_iff] at hO ⊢
+  match hO with
+  | ⟨k, hk⟩ =>
+    exists k*b^j
+    intros
+    sorry
   -- refine isBigO_iff.mp ?_
   -- refine IsBigO.of_abs_abs ?_
   -- refine IsBigO.abs_abs ?_
@@ -71,5 +76,33 @@ theorem Case1_3 :
 --Some substition required to achieve the result of O(n^(logb b a))
 --theorem Case1_7
 
+def bigO (g:ℝ → ℝ) : Set (ℝ → ℝ) :=
+  {f | ∃ (c n₀ : ℝ) , (0<c) ∧ ∀n , n₀ <= n → |f n| <= c * g n}
 
---end basics
+theorem Substitution (g : ℝ → ℝ) (hf: f ∈ bigO g) (b : ℝ) (hb : b > 1):
+  (fun n => f (n / b)) ∈ bigO (fun n => g (n / b)) := by
+  unfold bigO at hf
+  unfold bigO
+  simp
+  simp at hf
+  match hf with
+  | ⟨k, hk⟩ =>
+    exists k
+    constructor
+    exact hk.1
+    match hk.2 with
+    | ⟨N, hN⟩ =>
+    exists N*b
+    intro n
+    intro M
+    apply hN
+    refine (le_div_iff₀' ?_).mpr ?_
+    linarith
+    linarith
+
+
+
+
+
+
+end basics

@@ -3,7 +3,7 @@ import Mathlib.Data.Real.Basic
 import Mathlib.Data.Int.Basic
 
 def bigO (g:ℝ → ℝ) : Set (ℝ → ℝ) :=
-  {f | ∃ (c n₀ : ℝ) , (0<c) ∧ ∀n , n₀ <= n → |f n| <= c * |g n|}
+  {f | ∃ (c n₀ : ℝ) , (0<c) ∧ ∀n , n₀ <= n → |f n| <= c * g n}
 
 
 def bigOmega (g:ℝ → ℝ) : Set (ℝ → ℝ) :=
