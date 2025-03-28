@@ -1,7 +1,7 @@
 import Mathlib.Tactic
 import Mathlib.Data.Real.Basic
 import Mathlib.Analysis.SpecialFunctions.Log.Base --For using log base b
-import Mathlib.Analysis.Asymptotics.Defs -- Contains the definitions for big-O.
+import Mathlib.Analysis.Asymptotics.Defs -- Contains the definitions for big-O. NOW USING MY OWN DEFINITION
 
 
 section basics
@@ -54,12 +54,12 @@ theorem Case1_0 (j : ℕ) (hO : f =O[Filter.atTop] (fun n => n^(Real.logb b (a) 
 
 
 --The power ^(logb(a-ε) is distributed over n/b^j). The part with n^(...) is moved out of the sum too.
-theorem Case1_3 :
-  (g =O[atTop] fun n =>
-    ∑ j in range (⌊Real.logb b n⌋.toNat + 1), a^j * (n / b^j)^(Real.logb b (a - ε))) →
-  (g =O[atTop] fun n =>
-    n^(Real.logb b (a - ε)) * ∑ j in range (⌊Real.logb b n⌋.toNat + 1), (a * b^ε / b^(Real.logb b a))^j) := by
-  sorry
+-- theorem Case1_3 :
+--   (g =O[atTop] fun n =>
+--     ∑ j in range (⌊Real.logb b n⌋.toNat + 1), a^j * (n / b^j)^(Real.logb b (a - ε))) →
+--   (g =O[atTop] fun n =>
+--     n^(Real.logb b (a - ε)) * ∑ j in range (⌊Real.logb b n⌋.toNat + 1), (a * b^ε / b^(Real.logb b a))^j) := by
+--   sorry
 
 
 --Use the definition of logarithms to cancel out the a/b^(logb b a).
@@ -100,7 +100,13 @@ theorem Substitution (g : ℝ → ℝ) (hf: f ∈ bigO g) (b : ℝ) (hb : b > 1)
     linarith
     linarith
 
+theorem Case1_3 (g : ℝ → ℝ ) (b a ε: ℝ ) (hb : b > 1) (he : 0 < ε) (ha : 0 < a)
+  (hf : (fun n => f (n) ) ∈ bigO (fun n => ∑ j in Finset.range ((⌊Real.logb b n⌋.toNat)),
+  (a^j * (n/b^j)^(Real.logb b a - ε) ))):
+  (fun n => f (n) ) ∈ bigO (fun n => n^(Real.logb b a - ε) * ∑ j in Finset.range ((⌊Real.logb b n⌋.toNat)),
+    (a*b^ε / b^(Real.logb b a))^j) := by
 
+    sorry
 
 
 
