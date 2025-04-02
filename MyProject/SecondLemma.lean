@@ -133,6 +133,8 @@ lemma Stuff  (b a ε n: ℝ ) (hb : b > 1) (he : 0 < ε) (ha : 0 < a) :
       --ring
       field_simp
       rw [← Real.rpow_natCast, ← Real.rpow_mul, mul_comm] --This solves the main goal.
+      linarith
+      --apply le_of_lt
 
       sorry
 
