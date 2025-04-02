@@ -15,16 +15,26 @@ def φ : ℕ → ℕ
   | 0 => 0
   | x+1 => x
 
--- def T : ℝ → ℝ
---   | x <= 1 => 0
---   | x > 1 => T (x / b) + 1
+noncomputable def piecewise (x : ℝ) : ℝ :=
+  if x < 0 then piecewise (x + 1) + x
+  else x^2
+termination_by -Int.floor x
+decreasing_by
+  apply Nat.lt_of_succ_le
+  apply Int.floor_mono
+  linarith
 
-noncomputable def T (n b : ℝ) : ℕ :=
-  if n < b then 1 else T (n / b) b + 1
-  termination_by T n b => ⌊log b n⌋
-  decreasing_by
-    simp only [log_div_base, log_self]
-    apply Nat.floor_lt; linarith
+def T (x : ℝ) (hx : x > 0) : ℝ → ℝ :=
+  if x < 1 then (fun _ => 0)
+  else
+    let recursive := T (x / 2) (by linarith)
+    fun y => recursive y + 1
+termination_by T x hx => x / 2
+
+
+-- What does a case 1 T look like in the master theorem???
+--Write a proof about this thing.
+
 
 
 

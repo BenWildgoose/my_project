@@ -2,7 +2,8 @@ import Mathlib.Tactic
 import Mathlib.Data.Real.Basic
 import Mathlib.Analysis.SpecialFunctions.Log.Base --For using log base b
 import Mathlib.Analysis.Asymptotics.Defs -- Contains the definitions for big-O. NOW USING MY OWN DEFINITION
-
+--import Mathlib.Algebra.Group.Defs
+import Mathlib.Analysis.SpecialFunctions.Pow.Real --Loads of stuff for dealing with powers.
 
 section basics
 
@@ -82,29 +83,91 @@ def bigO (g:ℝ → ℝ) : Set (ℝ → ℝ) :=
 theorem Substitution (g : ℝ → ℝ) (hf: f ∈ bigO g) (b : ℝ) (hb : b > 1):
   (fun n => f (n / b)) ∈ bigO (fun n => g (n / b)) := by
   unfold bigO at hf
-  unfold bigO
+  unfold bigO --Unfolding the full definition of bigO. This gives a definition of bigO with quantifiers.
   simp
-  simp at hf
+  simp at hf --Very simple tactic that just tries to simplify whatever is in the target ⊢. Extremely useful
   match hf with
-  | ⟨k, hk⟩ =>
-    exists k
-    constructor
-    exact hk.1
-    match hk.2 with
-    | ⟨N, hN⟩ =>
-    exists N*b
-    intro n
-    intro M
-    apply hN
-    refine (le_div_iff₀' ?_).mpr ?_
+  | ⟨k, hk⟩ => --Here we match a term, k, with a ∃ statement (EXISTENSIALS).
+  --k has replaced c within the hypotheses hf.
+    exists k --k exists now.
+    constructor --Splits the and statement in half.
+    exact hk.1 --Goal is to prove 0 < k , which comes for free from hk.
+    match hk.2 with --Same process as before.
+    | ⟨N, hN⟩ => --Putting N where k is.
+    exists N*b --x is replaced with N*b.
+    intro n --We have a '∀ n' at the start of ⊢, so introducing n gets this sorted.
+    intro M --M takes the place of N * b ≤ n.
+    apply hN --The statement ⊢ |f (n / b)| ≤ k * g (n / b) is proven, but Lean needs to see that N <= n/b.
+    refine (le_div_iff₀' ?_).mpr ?_ --Tactic from apply?, now just needs to see b > 0.
     linarith
-    linarith
+    linarith --Usually deals with simple inequalities.
+    sorry
+
+lemma Stuff  (b a ε n: ℝ ) (hb : b > 1) (he : 0 < ε) (ha : 0 < a) :
+  ∑ j in Finset.range ((⌊Real.logb b n⌋.toNat)),
+    (a^j * (n/b^j)^(Real.logb b a - ε) ) = n^(Real.logb b a - ε) * ∑ j in Finset.range ((⌊Real.logb b n⌋.toNat)),
+      (a*(b^ε) / b^(Real.logb b a))^j := by
+      field_simp
+      rw [Finset.mul_sum]
+      congr --This thing is very useful
+      funext j
+      field_simp
+      rw [Real.div_rpow]
+      field_simp
+      nth_rw 1 [mul_assoc, mul_comm]
+      rw [mul_assoc, mul_assoc]
+      simp
+      left
+      ring_nf
+      rw [mul_comm, mul_assoc]
+      simp
+      left
+      ring_nf
+      rw [← Real.rpow_natCast, ← Real.rpow_mul] --j is inside the bracket
+      rw [← Real.rpow_natCast, ← Real.rpow_mul] --Repeating puts the next power of j inside the bracket.
+      nth_rw 2 [mul_comm]
+      group --Swaps j and ε in final bit. Also turns j into ↑j ? Probably worth doing to get rid of standalone j.
+      rw [Real.rpow_sub]
+      nth_rw 2 [Real.rpow_mul]
+      rw [div_mul_eq_mul_div]
+      --ring
+      field_simp
+      rw [← Real.rpow_natCast, ← Real.rpow_mul, mul_comm] --This solves the main goal.
+
+      sorry
+
+
 
 theorem Case1_3 (g : ℝ → ℝ ) (b a ε: ℝ ) (hb : b > 1) (he : 0 < ε) (ha : 0 < a)
   (hf : (fun n => f (n) ) ∈ bigO (fun n => ∑ j in Finset.range ((⌊Real.logb b n⌋.toNat)),
   (a^j * (n/b^j)^(Real.logb b a - ε) ))):
   (fun n => f (n) ) ∈ bigO (fun n => n^(Real.logb b a - ε) * ∑ j in Finset.range ((⌊Real.logb b n⌋.toNat)),
     (a*b^ε / b^(Real.logb b a))^j) := by
+    unfold bigO
+    unfold bigO at hf
+    simp
+    simp at hf
+    match hf with
+    | ⟨k,hk⟩ =>
+    exists k
+    constructor
+    exact hk.1
+    match hk.2 with
+    | ⟨r, hr⟩ =>
+    exists r --This could renamed in all sorts of ways. Question is what value would make the proof easy.
+    intro n --Value of...
+    intro hn
+
+
+
+
+
+
+
+
+
+
+
 
     sorry
 
