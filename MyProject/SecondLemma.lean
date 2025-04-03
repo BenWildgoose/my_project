@@ -103,7 +103,7 @@ theorem Substitution (g : ℝ → ℝ) (hf: f ∈ bigO g) (b : ℝ) (hb : b > 1)
     linarith --Usually deals with simple inequalities.
     sorry
 
-lemma Stuff  (b a ε n: ℝ ) (hb : b > 1) (he : 0 < ε) (ha : 0 < a) :
+lemma Stuff  (b a ε n: ℝ ) (hb : b > 1) (he : 0 < ε) (ha : 0 < a) (hn : n >= 0) :
   ∑ j in Finset.range ((⌊Real.logb b n⌋.toNat)),
     (a^j * (n/b^j)^(Real.logb b a - ε) ) = n^(Real.logb b a - ε) * ∑ j in Finset.range ((⌊Real.logb b n⌋.toNat)),
       (a*(b^ε) / b^(Real.logb b a))^j := by
@@ -133,7 +133,16 @@ lemma Stuff  (b a ε n: ℝ ) (hb : b > 1) (he : 0 < ε) (ha : 0 < a) :
       --ring
       field_simp
       rw [← Real.rpow_natCast, ← Real.rpow_mul, mul_comm] --This solves the main goal.
-      linarith
+      repeat linarith
+      apply pow_pos --Got rid of all the goals with powers in. Apart from the one with just j in.
+      nlinarith --Gets rid of b > 0 for some reason. Does not do this for b >= 0?
+      exact le_of_lt (zero_lt_one.trans hb)
+      exact le_of_lt (zero_lt_one.trans hb) --Finally solves b >= 0.
+      apply hn --Gets rid of n >= 0.
+      exact pow_nonneg (le_of_lt (zero_lt_one.trans hb)) j --Solves at 0 >= b^j.
+
+
+
       --apply le_of_lt
 
       sorry
