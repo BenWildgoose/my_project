@@ -124,6 +124,7 @@ lemma Stuff  (b a ε n: ℝ ) (hb : b > 1) (he : 0 < ε) (ha : 0 < a) (hn : n >=
       left
       ring_nf
       rw [← Real.rpow_natCast, ← Real.rpow_mul] --j is inside the bracket
+      --Naturals are an inductive type (zero and succ). Integers in a different way. Reals are cauchy.
       rw [← Real.rpow_natCast, ← Real.rpow_mul] --Repeating puts the next power of j inside the bracket.
       nth_rw 2 [mul_comm]
       group --Swaps j and ε in final bit. Also turns j into ↑j ? Probably worth doing to get rid of standalone j.
@@ -143,9 +144,10 @@ lemma Stuff  (b a ε n: ℝ ) (hb : b > 1) (he : 0 < ε) (ha : 0 < a) (hn : n >=
 
 
 
+
       --apply le_of_lt
 
-      sorry
+
 
 
 
