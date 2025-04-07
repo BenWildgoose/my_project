@@ -35,8 +35,11 @@ theorem exactPowersOfb (T : ℝ → ℝ) (f: ℝ → ℝ ) (hb : b > 1) (hT1 : �
     rw [← pow_succ]
     --Having trouble cancelling out the a ^ (i + 1) from each side.
     --They both have unusual types that don't work very well.
+    rw [add_assoc]
+    simp --This and above line removes the a ^ (i + 1) from either side.
     rw [Finset.mul_sum] --Renames j to i_1 to avoid capture... Will be a problem later in the proof.
 
+    --rw [Finset.sum_range_succ]
 
 
 
