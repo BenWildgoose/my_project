@@ -38,8 +38,25 @@ theorem exactPowersOfb (T : ℝ → ℝ) (f: ℝ → ℝ ) (hb : b > 1) (hT1 : �
     rw [add_assoc]
     simp --This and above line removes the a ^ (i + 1) from either side.
     rw [Finset.mul_sum] --Renames j to i_1 to avoid capture... Will be a problem later in the proof.
+    rw [Finset.sum_range_succ'] --Notice this tactic has a ' at the end. It peels off the first term, instead of the last.
+    simp --Gets rid of the nasty function f (b ^ (i+1))
+    congr
+    funext i_1 --Used for showing two functions are equal.
+    rw [← mul_assoc]
+    rw [pow_succ]
+    nth_rw 2 [mul_comm]
+    field_simp --Gets rid of the a * a^i_1
+    constructor --field_simp left an ∨, so constructor allows us to focus only on the first bit.
+    rw [pow_succ]
+    rw [pow_succ]
+    ring
+    nth_rw 3 [mul_comm]
+    nth_rw 1 [← mul_assoc]
+    nth_rw 4 [mul_comm]
 
-    --rw [Finset.sum_range_succ]
+
+
+    --rw [← mul_assoc]
 
 
 
