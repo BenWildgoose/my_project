@@ -26,12 +26,20 @@ theorem exactPowersOfb (T : ℝ → ℝ) (f: ℝ → ℝ ) (hb : b > 1) (hT1 : �
     nth_rw 3 [mul_comm]
     field_simp
     rw [ih]
+    --Using ring tactic causes issues (turns instances of j into x).
     -- set l := i + 1 with hl --Replacing i+1 with l to fix type errors. Uses set
     -- have hT : T (b ^ l) = a * T (b ^ l / b) + f (b ^ l) := hT2 _ sorry --Needs completing
     -- rw [←hT]
     rw [mul_add] --Distributes the a over the two terms on the left.
     nth_rw 1 [mul_comm]
     rw [← pow_succ]
+    --Having trouble cancelling out the a ^ (i + 1) from each side.
+    --They both have unusual types that don't work very well.
+    rw [Finset.mul_sum] --Renames j to i_1 to avoid capture... Will be a problem later in the proof.
+
+
+
+
 
 
   }
