@@ -53,7 +53,30 @@ theorem exactPowersOfb (T : ℝ → ℝ) (f: ℝ → ℝ ) (hb : b > 1) (hT1 : �
     nth_rw 3 [mul_comm]
     nth_rw 1 [← mul_assoc]
     nth_rw 4 [mul_comm]
+    field_simp
+    --Now starts proof of substatement.
+    ring_nf
+    induction i with
+    | zero => {
+      simp
+      apply hb
+    }
+    | succ m mh => {
+      rw [pow_succ]
+      nth_rw 2 [mul_comm]
+      have hb' : b>0 := by apply lt_trans zero_lt_one hb
+      have mh' : b * b ^ m > 0 := by apply lt_trans zero_lt_one mh
 
+
+    }
+
+
+
+    --rw [h₂]
+
+
+
+    --have b_ne_zero : b ≠ 0 := ne_of_gt hb
 
 
     --rw [← mul_assoc]
