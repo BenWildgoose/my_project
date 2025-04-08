@@ -55,20 +55,24 @@ theorem exactPowersOfb (T : ℝ → ℝ) (f: ℝ → ℝ ) (hb : b > 1) (hT1 : �
     nth_rw 4 [mul_comm]
     field_simp
     --Now starts proof of substatement.
-    ring_nf
-    induction i with
-    | zero => {
-      simp
-      apply hb
-    }
-    | succ m mh => {
-      rw [pow_succ]
-      nth_rw 2 [mul_comm]
-      have hb' : b>0 := by apply lt_trans zero_lt_one hb
-      have mh' : b * b ^ m > 0 := by apply lt_trans zero_lt_one mh
+    --ring_nf
+    rw [← Real.rpow_natCast] --Turns the problem into ℝ ^ ℝ instead of ℝ ^ ℕ
+    apply Real.one_lt_rpow hb
+    positivity
+
+    -- induction i with
+    -- | zero => {
+    --   simp
+    --   apply hb
+    -- }
+    -- | succ m mh => {
+    --   rw [pow_succ]
+    --   nth_rw 2 [mul_comm]
+    --   have hb' : b>0 := by apply lt_trans zero_lt_one hb
+    --   have mh' : b * b ^ m > 0 := by apply lt_trans zero_lt_one mh
 
 
-    }
+    -- }
 
 
 
