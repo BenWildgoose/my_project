@@ -49,11 +49,9 @@ theorem exactPowersOfb (T : ℝ → ℝ) (f: ℝ → ℝ ) (hb : b > 1) (hT1 : �
     constructor --field_simp left an ∨, so constructor allows us to focus only on the first bit.
     rw [pow_succ]
     rw [pow_succ]
-    ring
-    nth_rw 3 [mul_comm]
-    nth_rw 1 [← mul_assoc]
-    nth_rw 4 [mul_comm]
+    ring_nf
     field_simp
+
     --Now starts proof of substatement.
     --ring_nf
     rw [← Real.rpow_natCast] --Turns the problem into ℝ ^ ℝ instead of ℝ ^ ℕ
@@ -92,3 +90,41 @@ theorem exactPowersOfb (T : ℝ → ℝ) (f: ℝ → ℝ ) (hb : b > 1) (hT1 : �
   }
 
   sorry
+
+theorem Case2Exact (k : ℕ ) (T : ℝ → ℝ) (f: ℝ → ℝ ) (hb : b > 1) (hT1 : ∀ x , x <= 1 → T x = 1 )
+(hT2 : ∀ x , x > 1 → T x = a *  T (x / b) + f x) (hf : ∀x, f x = x ^ (Real.logb b a)) :
+  T (b^k) = a^k * (1 + k) := by
+  rw [exactPowersOfb T f hb hT1 hT2]
+  ring_nf
+  rw [mul_add]
+  simp
+  have moreSums : ∑ j ∈ Finset.range k, a ^ j * f (b ^ k / b ^ j) = ∑ j ∈ Finset.range k, a^k := by {
+    congr
+    funext m
+    rw [hf]
+    ring_nf
+    rw [Real.mul_rpow]
+    rw [← Real.rpow_natCast] --repeat didnt work here
+    rw [← Real.rpow_natCast]
+    rw [← Real.rpow_natCast]
+    rw [← Real.rpow_mul]
+    rw [← Real.rpow_mul]
+    nth_rw 3 [mul_comm]
+    nth_rw 4 [mul_comm]
+    rw [Real.rpow_mul]
+    rw [Real.rpow_mul]
+    rw [Real.rpow_logb]
+    rw [Real.inv_rpow]
+    rw [Real.rpow_logb]
+    field_simp
+    ring_nf
+    simp
+    nth_rw 2 [mul_comm]
+    nth_rw 1 [mul_assoc]
+    field_simp
+    rw [← Real.rpow_natCast]
+    rw [← Real.rpow_natCast]
+    rw [mul_div_cancel_of_invertible]
+
+  }
+  -- rw [hf]
