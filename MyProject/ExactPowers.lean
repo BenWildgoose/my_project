@@ -92,7 +92,7 @@ theorem exactPowersOfb (T : ℝ → ℝ) (f: ℝ → ℝ ) (hb : b > 1) (hT1 : �
   sorry
 
 theorem Case2Exact (k : ℕ ) (T : ℝ → ℝ) (f: ℝ → ℝ ) (hb : b > 1) (hT1 : ∀ x , x <= 1 → T x = 1 )
-(hT2 : ∀ x , x > 1 → T x = a *  T (x / b) + f x) (hf : ∀x, f x = x ^ (Real.logb b a)) :
+(hT2 : ∀ x , x > 1 → T x = a *  T (x / b) + f x) (hf : ∀x, f x = x ^ (Real.logb b a)) (ha : a > 0) :
   T (b^k) = a^k * (1 + k) := by
   rw [exactPowersOfb T f hb hT1 hT2]
   ring_nf
@@ -117,14 +117,32 @@ theorem Case2Exact (k : ℕ ) (T : ℝ → ℝ) (f: ℝ → ℝ ) (hb : b > 1) (
     rw [Real.inv_rpow]
     rw [Real.rpow_logb]
     field_simp
-    ring_nf
+    linarith
+    linarith
+    linarith
+    linarith
+    linarith
+    linarith
+    linarith
     simp
-    nth_rw 2 [mul_comm]
-    nth_rw 1 [mul_assoc]
+    linarith
+    linarith
+    simp
+    linarith
+    linarith
+    rw [← Real.rpow_natCast]
     field_simp
+    simp
     rw [← Real.rpow_natCast]
-    rw [← Real.rpow_natCast]
-    rw [mul_div_cancel_of_invertible]
+    field_simp
+    -- ring_nf
+    -- simp
+    -- nth_rw 2 [mul_comm]
+    -- nth_rw 1 [mul_assoc]
+    -- field_simp
+    -- rw [← Real.rpow_natCast]
+    -- rw [← Real.rpow_natCast]
+    -- rw [mul_div_cancel_of_invertible]
 
   }
   -- rw [hf]
