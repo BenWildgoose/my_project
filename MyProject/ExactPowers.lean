@@ -12,6 +12,10 @@ import Mathlib.Analysis.SpecialFunctions.Pow.Real --Loads of stuff for dealing w
 --   decreasing_by
 
 
+def bigO (g:ℝ → ℝ) : Set (ℝ → ℝ) :=
+  {f | ∃ (c n₀ : ℝ) , (0<c) ∧ ∀n , n₀ <= n → |f n| <= c * g n}
+
+
 theorem exactPowersOfb (T : ℝ → ℝ) (f: ℝ → ℝ ) (hb : b > 1) (hT1 : ∀ x , x <= 1 → T x = 1 )
 (hT2 : ∀ x , x > 1 → T x = a *  T (x / b) + f x) :
   T (b ^ k) = a^k + ∑ j in Finset.range (k), (a^j * f ((b^k) / (b^j)) ) := by
@@ -148,3 +152,17 @@ theorem Case2Exact (k : ℕ ) (T : ℝ → ℝ) (f: ℝ → ℝ ) (hb : b > 1) (
   rw [moreSums]
   simp
   rw [mul_comm]
+
+theorem TisBigOofg (k : ℕ ) (b c : ℝ ) (T f g: ℝ → ℝ) (hb : b > 1) (hc : c > 0) (hT1 : ∀ x , x <= 1 → T x = 1 )
+(hT2 : ∀ x , x > 1 → T x = a *  T (x / b) + f x) (hTbk : (fun k ↦ T (b^k)) ∈ bigO (fun k ↦ g (b^k)))
+(hTmono : ∀ x y , x <= y → T x <= T y ) (hgmono : ∀ x y , x <= y → g x <= g y ) :
+  (fun x => T x) ∈ bigO (fun x => g x) := by
+  unfold bigO
+  unfold bigO at hTbk
+  simp
+  simp at hTbk
+  match hTbk with
+  |
+
+
+  sorry
