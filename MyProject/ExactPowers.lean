@@ -145,4 +145,6 @@ theorem Case2Exact (k : ℕ ) (T : ℝ → ℝ) (f: ℝ → ℝ ) (hb : b > 1) (
     -- rw [mul_div_cancel_of_invertible]
 
   }
-  -- rw [hf]
+  rw [moreSums]
+  simp
+  rw [mul_comm]
