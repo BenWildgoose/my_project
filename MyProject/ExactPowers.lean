@@ -153,16 +153,22 @@ theorem Case2Exact (k : ℕ ) (T : ℝ → ℝ) (f: ℝ → ℝ ) (hb : b > 1) (
   simp
   rw [mul_comm]
 
-theorem TisBigOofg (k : ℕ ) (b c : ℝ ) (T f g: ℝ → ℝ) (hb : b > 1) (hc : c > 0) (hT1 : ∀ x , x <= 1 → T x = 1 )
-(hT2 : ∀ x , x > 1 → T x = a *  T (x / b) + f x) (hTbk : (fun k ↦ T (b^k)) ∈ bigO (fun k ↦ g (b^k)))
+theorem TisBigOofg (k : ℕ ) (x b c : ℝ ) (T f g: ℝ → ℝ) (hb : b > 1) (hx : x > 0) (hc : c > 0) (hT1 : ∀ x , x <= 1 → T x = 1 )
+(b_not_one : b ≠ 1) (b_gt_zero : b > 0)
+(hT2 : ∀ x , x > 1 → T x = a *  T (x / b) + f x) (hTbk : ∀ k : ℕ, T (b ^ k) ≤ c * g (b ^ k))
 (hTmono : ∀ x y , x <= y → T x <= T y ) (hgmono : ∀ x y , x <= y → g x <= g y ) :
   (fun x => T x) ∈ bigO (fun x => g x) := by
   unfold bigO
-  unfold bigO at hTbk
-  simp
-  simp at hTbk
-  match hTbk with
-  |
+  have x_le_btok_le_bx : ∃ k : ℕ , x <= b^k ∧ b^k <= b*x := by {
+    let k := Nat.ceil (Real.logb b x) --This is the value of k that will be used.
+    use k
+    constructor --Splits the and statement in two
+    rw [← Real.rpow_logb]
+  }
 
 
+
+
+
+  sorry
   sorry
