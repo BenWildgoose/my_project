@@ -156,7 +156,8 @@ theorem Case2Exact (k : ℕ ) (T : ℝ → ℝ) (f: ℝ → ℝ ) (hb : b > 1) (
 theorem TisBigOofg (k : ℕ ) (x b c : ℝ ) (T f g: ℝ → ℝ) (hb : b > 1) (hx : x > 0) (hc : c > 0) (hT1 : ∀ x , x <= 1 → T x = 1 )
 (b_not_one : b ≠ 1) (b_gt_zero : b > 0)
 (hT2 : ∀ x , x > 1 → T x = a *  T (x / b) + f x) (hTbk : ∀ k : ℕ, T (b ^ k) ≤ c * g (b ^ k))
-(hTmono : ∀ x y , x <= y → T x <= T y ) (hgmono : ∀ x y , x <= y → g x <= g y ) :
+(hTmono : ∀ x y , x <= y → T x <= T y ) (hgmono : ∀ x y , x <= y → g x <= g y )
+(hfmono : ∀ x y , x <= y → f x <= f y ) : --Add assumption for g(bx) being big O of g.
   (fun x => T x) ∈ bigO (fun x => g x) := by
   unfold bigO
   have x_le_btok_le_bx : ∃ k : ℕ , x <= b^k ∧ b^k <= b*x := by {
